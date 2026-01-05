@@ -1,0 +1,17 @@
+const PlusIcon = ({ variant = "light", className = "" }) => {
+  const fill = variant === "light" ? "#ffffff" : "var(--color-accent)";
+  return (
+    <svg
+      width="24px"
+      height="24px"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      fill={fill}
+      className={className}
+    >
+      <path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z" />
+    </svg>
+  );
+};
+
+export default PlusIcon;

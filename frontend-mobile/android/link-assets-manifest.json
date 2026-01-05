@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Neue-Bold.ttf",
+      "sha1": "9e52730a8d859dc94a9ab11c43b85659da89a11e"
+    },
+    {
+      "path": "assets/fonts/Neue-ExtraBold.ttf",
+      "sha1": "26e98392fd26fb11408b6b6bb83d6e956b3606b0"
+    },
+    {
+      "path": "assets/fonts/Neue-Light.ttf",
+      "sha1": "c3447e79a09afcf2d0ca8b0a496314531251b203"
+    },
+    {
+      "path": "assets/fonts/Neue-Regular.ttf",
+      "sha1": "2c5cc1f5e90fe1a1b0c0750be8e1bb8ef14f0ab9"
+    }
+  ]
+}

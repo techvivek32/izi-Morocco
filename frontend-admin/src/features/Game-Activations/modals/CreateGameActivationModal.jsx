@@ -1,0 +1,106 @@
+import Modal from "../../../components/Modal";
+import Button from "../../../components/Button";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import SpinnerIcon from "../../../components/svgs/SpinnerIcon";
+import { getPlayersDropdown } from "../../../slices/playerSlice";
+import { useEffect } from "react";
+import {
+  createGameActivation,
+  getGameActivationDropdown,
+  getGameActivations,
+  resetApiStateFromGameActivation,
+} from "../../../slices/gameActivationSlice";
+import useApiResponseHandler from "../../../hooks/useApiResponseHandler";
+import AntSearchableSelector from "../../../components/form/AntDesign/AntSearchableSelector";
+
+const CreateGameActivationModal = ({ open = true, onClose }) => {
+  const form = useForm({
+    defaultValues: {
+      gameId: "",
+      playerId: "",
+    },
+  });
+  const { control, handleSubmit, formState, setError, reset } = form;
+  const { errors } = formState;
+  const dispatch = useDispatch();
+  const { createGameActivationApi, getGameActivationDropdownApi } = useSelector(
+    (state) => state.gameActivation
+  );
+  const apiResponse = getGameActivationDropdownApi?.data?.response;
+  const games =
+    apiResponse?.map((g) => ({ value: g._id, label: g.title })) || [];
+  const { getPlayersDropdownApi } = useSelector((state) => state.player);
+
+  const players =
+    getPlayersDropdownApi.data?.response?.map((p) => ({
+      value: p.playerId,
+      label: p.name,
+    })) || [];
+
+  const onSubmit = async (data) => {
+    console.log("form submitted", data);
+    dispatch(createGameActivation(data));
+  };
+
+  useEffect(() => {
+    dispatch(getPlayersDropdown());
+    dispatch(getGameActivationDropdown());
+  }, [dispatch]);
+
+  useApiResponseHandler({
+    status: createGameActivationApi.status,
+    data: createGameActivationApi.data,
+    error: createGameActivationApi.error,
+    resetForm: () => reset({ playerId: "", gameId: "" }),
+    resetReduxStatus: () =>
+      dispatch(resetApiStateFromGameActivation("createGameActivationApi")),
+    setFormError: setError,
+    sideAction: () => {
+      dispatch(getGameActivations({ page: 1 }));
+      onClose && onClose();
+    },
+  });
+
+  return (
+    <Modal
+      open={open}
+      onOpenChange={onClose}
+      title={<span className="text-2xl">Create Game Activation</span>}
+      contentClassName="min-w-[90%] lg:min-w-[840px] min-h-[70vh] overflow-y-auto overflow-x-clip"
+      className="overflow-y-scroll scrollbar-hide text-blue min-h-[200px]"
+      showClose
+    >
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className="p-4 flex flex-col gap-4 items-end min-h-[400px]"
+      >
+        <AntSearchableSelector
+          id="playerId"
+          name="playerId"
+          labelName="Select Players"
+          options={players}
+          control={control}
+          errors={errors}
+        />
+
+        <AntSearchableSelector
+          id="gameId"
+          name="gameId"
+          labelName="Select Games"
+          options={games}
+          control={control}
+          errors={errors}
+        />
+
+        <Button type="submit" className="w-fit">
+          {"Create"}
+          {createGameActivationApi.isLoading && <SpinnerIcon />}
+        </Button>
+      </form>
+    </Modal>
+  );
+};
+
+export default CreateGameActivationModal;

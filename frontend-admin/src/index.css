@@ -1,0 +1,281 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Apply Neue Kabel to entire application */
+body,
+.ant-select,
+.ant-select-selector {
+  font-family: "Neue Kabel", sans-serif !important;
+  font-weight: 400;
+  /* Regular book weight */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Font weight utility classes */
+.font-thin {
+  font-weight: 100;
+}
+
+.font-extralight {
+  font-weight: 200;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+/* Italic utility (CSS-generated) */
+.italic {
+  font-style: italic;
+}
+
+.not-italic {
+  font-style: normal;
+}
+
+/* Typography scale */
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+@theme {
+  /* Direct semantic mapping without intermediate variables */
+  --color-primary: #0d3b66;
+  --color-secondary: #f4d35e;
+  --color-accent: #f95738;
+  --color-background: #faf0ca;
+  --color-warning: #ee964b;
+  --color-danger: #d62828;
+}
+
+/* Enhanced container class with extended breakpoints */
+.custom-container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 1380px;
+}
+
+/* hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.disable {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.disable:hover {
+  scale: 1 !important;
+}
+
+@layer base {
+  body {
+    @apply bg-[#faf0ca]/50 text-primary;
+  }
+
+  .common-page {
+    @apply flex flex-col gap-4 p-4;
+  }
+
+  .input-focus-and-hover {
+    @apply hover:outline focus:outline hover:outline-accent focus:outline-accent duration-300;
+  }
+
+  .pagination-btn {
+    @apply h-7 w-7 lg:h-9 lg:w-9 rounded-full hover:scale-125 duration-300 flex items-center justify-center text-primary cursor-pointer;
+  }
+}
+
+/* MapBox styles */
+#root {
+  /* position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0; */
+  width: auto;
+  height: 100%;
+}
+
+#map-container {
+  height: auto;
+  width: auto;
+  background-color: lightgrey;
+}
+
+.sidebar {
+  background-color: rgb(35 55 75 / 90%);
+  color: #fff;
+  padding: 6px 12px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 12px;
+  border-radius: 4px;
+}
+
+.reset-button {
+  position: absolute;
+  top: 50px;
+  z-index: 1;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.blockly-workspace {
+  height: 600px;
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+/* react-split-grid styles */
+
+.wrapper {
+  width: 100%;
+  height: 10%;
+  display: grid;
+  grid-template-columns: 1fr 16px 1fr;
+}
+
+.wrapper > div:first-child {
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper > div:last-child {
+  width: 100%;
+  height: 100%;
+}
+
+.resize-gutter {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  cursor: ew-resize;
+}
+
+.resize-gutter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 50px;
+  display: block;
+  border-radius: 4px;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+}
+
+/* row based - FIXED */
+.wrapper-2 {
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  grid-template-rows: 1fr 16px 1fr;
+}
+
+.wrapper-2 > div:first-child {
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper-2 > div:last-child {
+  width: 100%;
+  height: 100%;
+}
+
+.resize-gutter-2 {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  cursor: row-resize;
+}
+
+.resize-gutter-2::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 4px;
+  width: 50px;
+  display: block;
+  border-radius: 4px;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+}

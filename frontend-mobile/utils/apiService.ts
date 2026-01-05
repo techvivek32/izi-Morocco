@@ -1,0 +1,73 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios, { AxiosRequestConfig } from 'axios';
+import { API_URL, APP_NAME } from '@env';
+
+const API_BASE_URL: string =
+  'https://alliedge.space/izi-player-api';
+
+  console.log({API_BASE_URL})
+
+/**
+ * Interface for defining the properties required for making an API service request
+ * @interface ApiServiceProps
+ */
+interface ApiServiceProps {
+  method: string;
+  endpoint: string;
+  headers?: Record<string, string>;
+  data?: any;
+  params?: any;
+}
+
+/**
+ * Function to make API requests using Axios
+ * @param method The HTTP method (GET, POST, PUT, DELETE, etc.)
+ * @param endpoint The API endpoint
+ * @param headers Additional headers for the request
+ * @param data Data to be sent with the request (for POST and PUT requests)
+ * @returns A Promise that resolves with the API response data
+ */
+const ApiService = async ({
+  method,
+  endpoint,
+  headers = {},
+  data,
+  params,
+}: ApiServiceProps): Promise<any> => {
+  try {
+    const token = await AsyncStorage.getItem('accessToken');
+
+    // Ensure the endpoint is not undefined
+    if (!endpoint) {
+      throw new Error('API endpoint is undefined.');
+    }
+
+    const axiosConfig: AxiosRequestConfig = {
+      method,
+      url: `${API_BASE_URL}/${endpoint}`,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
+        ...headers,
+      },
+      data,
+      params,
+    };
+
+    const api = axios.create();
+
+    api.interceptors.response.use(
+      (response: { data: any }) => response.data,
+      (error: any) => {
+        throw error;
+      },
+    );
+
+    const response = await api(axiosConfig);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default ApiService;

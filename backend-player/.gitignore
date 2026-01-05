@@ -1,0 +1,10 @@
+node_modules
+.env*
+package-lock.json
+.qodo
+yarn.lock
+build
+dist
+coverage
+
+.DS_Store
