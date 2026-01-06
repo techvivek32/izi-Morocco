@@ -43,12 +43,22 @@ init().then((dbStatus) => {
   api.use(bodyParser.json({ limit: '32mb' }))
   api.use(bodyParser.urlencoded({ limit: '32mb', extended: false }))
   api.use(cookieParser())
+  const originsEnv = process.env.CORS_ORIGINS || ''
+  const allowedOrigins = [
+    'http://localhost:5173',
+    process.env.FRONTEND_URL,
+    ...originsEnv.split(',').map((s) => s.trim()).filter(Boolean),
+  ].filter(Boolean)
   api.use(
     cors({
       allowedHeaders: 'Content-Type , Authorization',
       credentials: true,
       methods: 'POST, GET, PATCH, PUT, DELETE, HEAD, OPTIONS',
-      origin: ['http://localhost:5173', process.env.FRONTEND_URL],
+      origin: (origin, cb) => {
+        if (!origin || allowedOrigins.includes(origin)) return cb(null, true)
+        return cb(new Error('Not allowed by CORS'))
+      },
+      optionsSuccessStatus: 200,
     }),
   )
 
