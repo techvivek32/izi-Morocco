@@ -2,8 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig } from 'axios';
 import { API_URL, APP_NAME } from '@env';
 
-const API_BASE_URL: string =
-  'https://alliedge.space/izi-player-api';
+const API_BASE_URL: string = API_URL;
 
   console.log({API_BASE_URL})
 
