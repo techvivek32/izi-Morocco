@@ -50,14 +50,23 @@ init().then((dbStatus) => {
     process.env.FRONTEND_URL,
     ...originsEnv.split(',').map((s) => s.trim()).filter(Boolean),
   ].filter(Boolean)
+
+  console.log('Allowed Origins:', allowedOrigins);
+
   api.use(
     cors({
-      allowedHeaders: 'Content-Type , Authorization',
+      allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,
-      methods: 'POST, GET, PATCH, PUT, DELETE, HEAD, OPTIONS',
+      methods: ['POST', 'GET', 'PATCH', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'],
       origin: (origin, cb) => {
-        if (!origin || allowedOrigins.includes(origin)) return cb(null, true)
-        return cb(new Error('Not allowed by CORS'))
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return cb(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+          return cb(null, true);
+        } else {
+          console.log('CORS blocked origin:', origin);
+          return cb(new Error('Not allowed by CORS'));
+        }
       },
       optionsSuccessStatus: 200,
     }),
@@ -67,7 +76,9 @@ init().then((dbStatus) => {
 
 
 
-  api.use(helmet())
+  api.use(helmet({
+    crossOriginResourcePolicy: false,
+  }))
   api.use(morgan('dev'))
 
 
