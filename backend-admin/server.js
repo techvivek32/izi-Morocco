@@ -46,6 +46,7 @@ init().then((dbStatus) => {
   const originsEnv = process.env.CORS_ORIGINS || ''
   const allowedOrigins = [
     'http://localhost:5173',
+    'https://izi-morocco-delta.vercel.app',
     process.env.FRONTEND_URL,
     ...originsEnv.split(',').map((s) => s.trim()).filter(Boolean),
   ].filter(Boolean)

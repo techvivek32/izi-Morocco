@@ -201,7 +201,7 @@ export const logoutController = async (req, res) => {
 export const verifyTokensController = async (req, res) => {
   try {
 
-    let accessToken = req.headers.authorization?.split(' ')[1]
+    let accessToken = req.headers.authorization?.split(' ')[1] || req.cookies?.accessToken
 
     if (!accessToken) {
       throw buildErrorObject(httpStatus.UNAUTHORIZED, 'ACCESS_TOKEN_MISSING')
@@ -523,5 +523,4 @@ export const resetPasswordController = async(req , res)=>{
     handleError(res ,err)
   }
 }
-
 
