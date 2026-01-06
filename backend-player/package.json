@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only scripts/dev.js",
+    "dev": "node scripts/start.js",
+    "dev:local": "ts-node-dev --respawn --transpile-only scripts/dev.js",
     "build": "tsc",
     "start": "node scripts/start.js",
     "lint": "eslint ."
