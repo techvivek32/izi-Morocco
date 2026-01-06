@@ -6,7 +6,7 @@ module.exports = [
    
     fullName: 'Super admin',
     email: 'super@admin.com',
-    password: '$2b$05$Ru853OuumyHkvztCVpCiUe3zjZQtqNT7aACSi1fRby5L522W6u93e',
+    password: '$2b$10$pl0/KgcX2QGcrw4MO1sWe.PPcnM5qqVRjSy.fD6aCyrat7rn1dpR2',
     blockExpires: new Date('2024-10-16T00:00:00.000Z'),
     loginAttempts: 0,
     roleId: new mongoose.Types.ObjectId('670fbc699aedcfcb302862ce'),
