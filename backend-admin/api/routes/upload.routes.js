@@ -13,10 +13,11 @@ const router = express.Router();
 router.use(uploadLimiter)
 
 
-const finalUploadController =
-  process.env.USE_CLOUDINARY === 'true'
-    ? uploadController.cloudinaryUploadController
-    : uploadController.uploadController;
+const useCloudinary =
+  process.env.USE_CLOUDINARY === 'true' || !process.env.S3_BUCKET;
+const finalUploadController = useCloudinary
+  ? uploadController.cloudinaryUploadController
+  : uploadController.uploadController;
 
 const upload = multer({
   dest: 'upload/'
