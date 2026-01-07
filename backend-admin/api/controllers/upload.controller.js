@@ -46,7 +46,8 @@ export const verifyAWSConnection = async () => {
 // Upload Controller
 export const uploadController = async (req, res) => {
   try {
-    const files = req.files;
+    const { images = [], videos = [], audios = [] } = req.files || {};
+    const files = [...images, ...videos, ...audios];
 
     const bucketName = process.env.S3_BUCKET;
 
@@ -57,7 +58,7 @@ export const uploadController = async (req, res) => {
         'S3_BUCKET_NAME is not set'
       );
     }
-    if (!files || files.length === 0) {
+    if (!files.length) {
       throw buildErrorObject(httpStatus.BAD_REQUEST, 'No files uploaded');
     }
 
