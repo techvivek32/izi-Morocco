@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "00735a35-316b-408b-81dd-9194dfa115d4",
+		"name": "IZIMorocco Admin Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46806040",
+		"_collection_link": "https://orange-zodiac-482841.postman.co/workspace/New-Team-Workspace~c24bf317-30cb-4aa4-a7a1-16cd737377a2/collection/46806040-00735a35-316b-408b-81dd-9194dfa115d4?action=share&source=collection_link&creator=46806040"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "super@admin.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "Test@123",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "test@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test@1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{admin}}/auth/login",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "fullName",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test@123",
+									"type": "text"
+								},
+								{
+									"key": "userGroupId",
+									"value": "68d5172553eae18758ad0333",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{admin}}/users",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "password",
+									"value": "Test@1234",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "userGroupId",
+									"value": "68d5172553eae18758ad0331",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{admin}}/users/68d51c25de79e42966f8bec9",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"users",
+								"68d51c25de79e42966f8bec9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{admin}}/users",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Groups",
+			"item": [
+				{
+					"name": "Get User Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{admin}}/user-groups",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"user-groups"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "Create Questions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\n//   \"questionName\": \"What is 2 + 2?\",\n//   \"questionDescription\": \"Basic arithmetic question\",\n//   \"answerType\": \"mcq\",\n//   \"options\": [\n//     { \"text\": \"2\", \"isCorrect\": false },\n//     { \"text\": \"3\", \"isCorrect\": false },\n//     { \"text\": \"4\", \"isCorrect\": true },\n//     { \"text\": \"5\", \"isCorrect\": false }\n//   ],\n//   \"points\": 5,\n//   \"tags\": [\"math\", \"arithmetic\"]\n\n// }\n\n\n\n// {\n//   \"questionName\": \"What is the capital of France?\",\n//   \"questionDescription\": \"Geography question\",\n//   \"answerType\": \"text\",\n//   \"correctAnswers\": [\"Paris\", \"paris\"],\n//   \"points\": 10,\n//   \"tags\": [\"geography\", \"capital cities\"]\n\n// }\n\n\n\n{\n  \"questionName\": \"How many continents are there on Earth?\",\n  \"questionDescription\": \"General knowledge\",\n  \"answerType\": \"number\",\n  \"correctAnswers\": [7],\n  \"points\": 10,\n  \"tags\": [\"geography\", \"general knowledge\"]\n \n}\n\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin}}/questions",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Question",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\n//   \"questionName\": \"What is 2 + 2?\",\n//   \"questionDescription\": \"Basic arithmetic question\",\n//   \"answerType\": \"mcq\",\n//   \"options\": [\n//     { \"text\": \"2\", \"isCorrect\": false },\n//     { \"text\": \"3\", \"isCorrect\": false },\n//     { \"text\": \"4\", \"isCorrect\": true },\n//     { \"text\": \"5\", \"isCorrect\": false }\n//   ],\n//   \"points\": 5,\n//   \"tags\": [\"math\", \"arithmetic\"]\n\n// }\n\n\n\n// {\n//   \"questionName\": \"What is the capital of France?\",\n//   \"questionDescription\": \"Geography question\",\n//   \"answerType\": \"text\",\n//   \"correctAnswers\": [\"Paris\", \"paris\"],\n//   \"points\": 10,\n//   \"tags\": [\"geography\", \"capital cities\"]\n\n// }\n\n\n\n{\n  \"questionName\": \"How many continents are there on Earth?\",\n  \"questionDescription\": \"General knowledge\",\n  \"answerType\": \"text\",\n  \"correctAnswers\": [7],\n  \"points\": 10,\n  \"tags\": [\"geography\", \"general knowledge\"]\n \n}\n\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin}}/questions/68d660c76f77958535455298",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"questions",
+								"68d660c76f77958535455298"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Questions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\n//   \"questionName\": \"What is 2 + 2?\",\n//   \"questionDescription\": \"Basic arithmetic question\",\n//   \"answerType\": \"mcq\",\n//   \"options\": [\n//     { \"text\": \"2\", \"isCorrect\": false },\n//     { \"text\": \"3\", \"isCorrect\": false },\n//     { \"text\": \"4\", \"isCorrect\": true },\n//     { \"text\": \"5\", \"isCorrect\": false }\n//   ],\n//   \"points\": 5,\n//   \"tags\": [\"math\", \"arithmetic\"]\n\n// }\n\n\n\n// {\n//   \"questionName\": \"What is the capital of France?\",\n//   \"questionDescription\": \"Geography question\",\n//   \"answerType\": \"text\",\n//   \"correctAnswers\": [\"Paris\", \"paris\"],\n//   \"points\": 10,\n//   \"tags\": [\"geography\", \"capital cities\"]\n\n// }\n\n\n\n{\n  \"questionName\": \"How many continents are there on Earth?\",\n  \"questionDescription\": \"General knowledge\",\n  \"answerType\": \"number\",\n  \"correctAnswers\": [7],\n  \"points\": 10,\n  \"tags\": [\"geography\", \"general knowledge\"]\n \n}\n\n\n"
+						},
+						"url": {
+							"raw": "{{admin}}/questions",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Question Settings",
+			"item": [
+				{
+					"name": "Get Question Settings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin}}/question-settings/68d660c76f77958535455298",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"question-settings",
+								"68d660c76f77958535455298"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mutate Question Settings",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"timeLimit\": 10,\n  \"timeUnit\": \"minutes\",\n  \"iconName\": \"timer-icon\",\n  \"radiusColor\": \"#FF5733\",\n  \"locationRadius\": 100\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin}}/question-settings/68d660c76f77958535455298",
+							"host": [
+								"{{admin}}"
+							],
+							"path": [
+								"question-settings",
+								"68d660c76f77958535455298"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
