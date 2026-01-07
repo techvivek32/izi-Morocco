@@ -19,7 +19,7 @@ const finalUploadController =
     : uploadController.uploadController;
 
 const upload = multer({
-  dest: 'uploads/'
+  dest: 'upload/'
 });
 
 const mediaUpload = upload.fields([
