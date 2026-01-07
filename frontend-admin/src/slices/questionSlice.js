@@ -68,6 +68,7 @@ export const getAllQuestions = createAsyncThunk(
   async ({ page = 1, searchTerm = "", tags = "" } = {}) => {
     const params = new URLSearchParams();
     params.append("page", page);
+    params.append("t", Date.now());
     if (searchTerm) {
       params.append("search", searchTerm);
     }
