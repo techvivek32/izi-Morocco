@@ -116,7 +116,7 @@ export const signOut = createAsyncThunk('auth/signOut', async () => {
 
 export const verifyAccount = createAsyncThunk(
   'auth/verifyAccount',
-  async ({ data }, { rejectWithValue }) => {
+  async ({ data }: { data: any }, { rejectWithValue }) => {
     try {
       const response = await ApiService({
         method: 'POST',
@@ -125,6 +125,66 @@ export const verifyAccount = createAsyncThunk(
       });
       console.log({response})
       return response; // Return the response
+    } catch (err: any) {
+      if (err?.response?.data) {
+        return rejectWithValue(err.response.data);
+      }
+      return rejectWithValue({ message: 'Something went wrong' });
+    }
+  },
+);
+
+export const forgetPassword = createAsyncThunk(
+  'auth/forgetPassword',
+  async ({ email }: { email: string }, { rejectWithValue }) => {
+    try {
+      const response = await ApiService({
+        method: 'POST',
+        endpoint: apiPaths.forgetPassword,
+        data: { email },
+      });
+      return response;
+    } catch (err: any) {
+      if (err?.response?.data) {
+        return rejectWithValue(err.response.data);
+      }
+      return rejectWithValue({ message: 'Something went wrong' });
+    }
+  },
+);
+
+export const setupPassword = createAsyncThunk(
+  'auth/setupPassword',
+  async ({ data }: { data: any }, { rejectWithValue }) => {
+    try {
+      const response = await ApiService({
+        method: 'POST',
+        endpoint: apiPaths.setupPassword,
+        data: data,
+      });
+      return response;
+    } catch (err: any) {
+      if (err?.response?.data) {
+        return rejectWithValue(err.response.data);
+      }
+      return rejectWithValue({ message: 'Something went wrong' });
+    }
+  },
+);
+
+export const resendOtp = createAsyncThunk(
+  'auth/resendOtp',
+  async (
+    { email, reqFor }: { email: string; reqFor: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await ApiService({
+        method: 'POST',
+        endpoint: apiPaths.resendOtp,
+        data: { email, reqFor },
+      });
+      return response;
     } catch (err: any) {
       if (err?.response?.data) {
         return rejectWithValue(err.response.data);

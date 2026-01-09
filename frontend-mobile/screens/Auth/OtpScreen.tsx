@@ -24,7 +24,7 @@ import { RootState } from '../../store/store';
 
 const { height } = Dimensions.get('window');
 
-export default function OtpScreen({ navigation, route }) {
+export default function OtpScreen({ navigation, route }: any) {
   const { from, email } = route.params || {};
   const [otp, setOtp] = useState('');
   const dispatch = useDispatch<any>();
@@ -32,17 +32,41 @@ export default function OtpScreen({ navigation, route }) {
   const { isOtpLoading: loading } = useSelector(
     (state: RootState) => state.auth,
   );
-  console.log({ loading });
 
   const handleOtp = async () => {
     if (otp.length !== 6) {
-      alert('Please enter valid OTP');
+      Alert.alert('Error', 'Please enter valid OTP');
       return;
     }
 
     if (from === 'ForgotPassword') {
-      navigation.navigate('ResetPassword');
-      return;
+      try {
+        const res = await dispatch(
+          verifyAccount({
+            data: {
+              email: email?.toLowerCase(),
+              otp: otp,
+              reqFor: 'FORGET_PASSWORD',
+            },
+          }),
+        ).unwrap();
+        navigation.navigate('ResetPassword', {
+          email: email?.toLowerCase(),
+          otp: otp,
+          token: res.token,
+        });
+      } catch (error: any) {
+        console.error('Error verifying OTP:', error);
+        if (error?.errors) {
+          const fieldErrors: { [key: string]: string } = {};
+          error.errors.forEach((err: any) => {
+            fieldErrors[err.field] = err.message;
+          });
+          setErrors(fieldErrors);
+        } else {
+          setErrors({ general: error.message || 'Something went wrong' });
+        }
+      }
     }
     if (from === 'SignUp') {
       try {
@@ -53,7 +77,7 @@ export default function OtpScreen({ navigation, route }) {
 
         // Navigate only if OTP verification is successful
         navigation.navigate('Avatar');
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error verifying OTP:', error);
 
         // Handle errors and display them to the user
@@ -73,27 +97,23 @@ export default function OtpScreen({ navigation, route }) {
         console.log({ email, otp });
 
         // Dispatch the verifyAccount action with correct values
-        const res = await dispatch(
+        const res: any = await dispatch(
           verifyAccount({ data: { email: email?.toLowerCase(), otp: otp } }),
         ).unwrap();
         console.log(res);
 
         // Navigate only if OTP verification is successful
         navigation.navigate('Avatar');
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+
         // Handle errors and display them to the user
-        if (error?.errors) {
-          const fieldErrors: { [key: string]: string } = {};
-          error.errors.forEach((err: any) => {
-            fieldErrors[err.field] = err.message;
-          });
-          setErrors(fieldErrors);
-        } else if (!error?.success) {
-          console.log({ msg: error?.message });
-          setErrors({ general: error?.message });
+        if (error?.success === false) {
+          setErrors({ general: error.message || 'Invalid OTP' });
+        } else if (error?.message) {
+          setErrors({ general: error.message });
         } else {
-          setErrors({ general: error?.message || 'Something went wrong' });
+          setErrors({ general: error.message || 'Something went wrong' });
         }
       }
     }
@@ -157,10 +177,9 @@ export default function OtpScreen({ navigation, route }) {
                     borderColor: colors.primarydark,
                     width: RFValue(40),
                     height: RFValue(50),
-                    fontSize: RFValue(20),
                     textAlign: 'center',
                     color: colors.black,
-                  }}
+                  } as any}
                 />
                 {errors && (
                   <Text style={{ color: 'red', marginTop: RFValue(2) }}>

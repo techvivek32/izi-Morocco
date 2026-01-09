@@ -7,6 +7,9 @@ export const apiPaths = {
   signup: "auth/signup",
   me: "player/me",
   verifyAccount: "auth/verify-account",
+  forgetPassword: "auth/forget-password",
+  setupPassword: "auth/setup-password",
+  resendOtp: "auth/resend-otp",
 
   // game
   getGame:"games",

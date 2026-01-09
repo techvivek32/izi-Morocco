@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors';
@@ -19,21 +20,46 @@ import { RFValue } from '../../utils/responsive';
 import SplashButton from '../../components/SplashButton';
 import ScreenWrapper from '../../components/ScreenWrapper';
 
+import { setupPassword } from '../../store/authSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+
 const { height } = Dimensions.get('window');
 
-export default function ResetPassword({ navigation }) {
-  const [email, setEmail] = useState('');
+export default function ResetPassword({ navigation, route }: any) {
+  const { email, otp, token } = route.params || {};
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
     setLoading(true);
-
-    // fake API call delay
-    setTimeout(() => {
+    try {
+      // The backend setup-password expects a token in the body.
+      // We got this token from the verifyAccount API call in OtpScreen.
+      await dispatch(
+        setupPassword({
+          data: { password, confirmPassword, email, otp, token },
+        }),
+      ).unwrap();
       setLoading(false);
-      navigation.navigate('SignIn');
-    }, 1000);
+      Alert.alert('Success', 'Password reset successfully', [
+        { text: 'OK', onPress: () => navigation.navigate('SignIn') },
+      ]);
+    } catch (error: any) {
+      setLoading(false);
+      Alert.alert('Error', error?.message || 'Something went wrong');
+    }
   };
 
   return (
@@ -86,14 +112,16 @@ export default function ResetPassword({ navigation }) {
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry
+                  error={null}
                 />
 
                 <CustomInput
                   label="Confirm Password"
                   placeholder="Enter your confirm password"
-                  value={password}
-                  onChangeText={setPassword}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
                   secureTextEntry
+                  error={null}
                 />
 
                 <SplashButton

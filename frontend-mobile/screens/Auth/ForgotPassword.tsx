@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors';
@@ -19,21 +20,32 @@ import { RFValue } from '../../utils/responsive';
 import SplashButton from '../../components/SplashButton';
 import ScreenWrapper from '../../components/ScreenWrapper';
 
+import { forgetPassword } from '../../store/authSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+
 const { height } = Dimensions.get('window');
 
-export default function ForgotPassword({ navigation }) {
+export default function ForgotPassword({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleForgot = () => {
+  const handleForgot = async () => {
+    if (!email) {
+      Alert.alert('Error', 'Please enter your email');
+      return;
+    }
     setLoading(true);
-    // fake API call delay
-    setTimeout(() => {
+    try {
+      await dispatch(forgetPassword({ email: email.toLowerCase() })).unwrap();
       setLoading(false);
-      //   navigation.navigate('Otp');
-      navigation.navigate('Otp', { from: 'ForgotPassword' });
-    }, 1000);
+      navigation.navigate('Otp', { from: 'ForgotPassword', email: email.toLowerCase() });
+    } catch (error: any) {
+      setLoading(false);
+      Alert.alert('Error', error?.message || 'Something went wrong');
+    }
   };
 
   return (
@@ -86,6 +98,7 @@ export default function ForgotPassword({ navigation }) {
                   onChangeText={setEmail}
                   placeholder="Enter your email"
                   keyboardType="email-address"
+                  error={null}
                 />
 
                 <SplashButton

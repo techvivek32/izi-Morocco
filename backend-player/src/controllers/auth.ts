@@ -117,7 +117,7 @@ export const login = async (req: Request, res: Response) => {
 }
 
 export const verifyAccount = async (req: Request, res: Response) => {
-  const { email, otp } = req.body || {}
+  const { email, otp, reqFor = 'ACCOUNT_VERIFICATION' } = req.body || {}
 
   if (!email || !otp) {
     return res.status(400).json({
@@ -135,14 +135,19 @@ export const verifyAccount = async (req: Request, res: Response) => {
     })
   }
 
-  if (player.isVerified) {
+  if (player.isVerified && reqFor === 'ACCOUNT_VERIFICATION') {
     return res.status(400).json({
       success: false,
       message: 'Account is already verified. Please login.'
     })
   }
 
-  const key = `accountVerification_${player.playerId}`
+  const featureMap: { [key: string]: string } = {
+    ACCOUNT_VERIFICATION: 'accountVerification',
+    FORGET_PASSWORD: 'forgetPassword'
+  }
+
+  const key = `${featureMap[reqFor]}_${player.playerId}`
   const tempData = await TempStorage.findOne({ key, value: otp })
 
   if (!tempData) {
@@ -152,17 +157,32 @@ export const verifyAccount = async (req: Request, res: Response) => {
     })
   }
 
-  await Promise.all([
-    Players.updateOne(
+  if (reqFor === 'ACCOUNT_VERIFICATION') {
+    await Players.updateOne(
       { playerId: player.playerId },
       { isVerified: true, updatedAt: new Date() }
-    ),
-    TempStorage.deleteOne({ key })
-  ])
+    )
+  }
+
+  await TempStorage.deleteOne({ key })
+
+  let token = ''
+  if (reqFor === 'FORGET_PASSWORD') {
+    token = createJWT(
+      {
+        id: player._id // setup-password uses Players.findById(tokenData.id)
+      },
+      process.env.JWT_SECRET || ''
+    )
+  }
 
   return res.json({
     success: true,
-    message: 'Account verified successfully. You can now login.'
+    message:
+      reqFor === 'ACCOUNT_VERIFICATION'
+        ? 'Account verified successfully. You can now login.'
+        : 'OTP verified successfully.',
+    token: token || undefined
   })
 }
 
