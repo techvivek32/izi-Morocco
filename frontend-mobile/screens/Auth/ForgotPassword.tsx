@@ -4,8 +4,6 @@ import {
   View,
   Text,
   Dimensions,
-  ActivityIndicator,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
@@ -21,15 +19,14 @@ import SplashButton from '../../components/SplashButton';
 import ScreenWrapper from '../../components/ScreenWrapper';
 
 import { forgetPassword } from '../../store/authSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
 
 const { height } = Dimensions.get('window');
 
 export default function ForgotPassword({ navigation }: any) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { isLoading: loading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleForgot = async () => {
@@ -37,13 +34,14 @@ export default function ForgotPassword({ navigation }: any) {
       Alert.alert('Error', 'Please enter your email');
       return;
     }
-    setLoading(true);
+
     try {
       await dispatch(forgetPassword({ email: email.toLowerCase() })).unwrap();
-      setLoading(false);
-      navigation.navigate('Otp', { from: 'ForgotPassword', email: email.toLowerCase() });
+      navigation.navigate('Otp', {
+        from: 'ForgotPassword',
+        email: email.toLowerCase(),
+      });
     } catch (error: any) {
-      setLoading(false);
       Alert.alert('Error', error?.message || 'Something went wrong');
     }
   };

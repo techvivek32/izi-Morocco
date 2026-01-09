@@ -4,8 +4,6 @@ import {
   View,
   Text,
   Dimensions,
-  ActivityIndicator,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
@@ -21,8 +19,8 @@ import SplashButton from '../../components/SplashButton';
 import ScreenWrapper from '../../components/ScreenWrapper';
 
 import { setupPassword } from '../../store/authSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
 
 const { height } = Dimensions.get('window');
 
@@ -30,7 +28,7 @@ export default function ResetPassword({ navigation, route }: any) {
   const { email, otp, token } = route.params || {};
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { isLoading: loading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleReset = async () => {
@@ -43,7 +41,6 @@ export default function ResetPassword({ navigation, route }: any) {
       return;
     }
 
-    setLoading(true);
     try {
       // The backend setup-password expects a token in the body.
       // We got this token from the verifyAccount API call in OtpScreen.
@@ -52,12 +49,10 @@ export default function ResetPassword({ navigation, route }: any) {
           data: { password, confirmPassword, email, otp, token },
         }),
       ).unwrap();
-      setLoading(false);
       Alert.alert('Success', 'Password reset successfully', [
         { text: 'OK', onPress: () => navigation.navigate('SignIn') },
       ]);
     } catch (error: any) {
-      setLoading(false);
       Alert.alert('Error', error?.message || 'Something went wrong');
     }
   };

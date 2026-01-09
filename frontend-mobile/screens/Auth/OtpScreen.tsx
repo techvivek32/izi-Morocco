@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
@@ -182,8 +181,8 @@ export default function OtpScreen({ navigation, route }: any) {
                   } as any}
                 />
                 {errors && (
-                  <Text style={{ color: 'red', marginTop: RFValue(2) }}>
-                    {errors.general || 'Somthing went wrong'}
+                  <Text style={[commonStyles.pText, { color: 'red', marginTop: RFValue(2) }]}>
+                    {errors.general || 'Something went wrong'}
                   </Text>
                 )}
 

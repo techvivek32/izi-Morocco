@@ -255,6 +255,43 @@ const authSlice = createSlice({
         state.error = action.payload || action.error; // store backend error
       })
 
+      // forgetPassword
+      .addCase(forgetPassword.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(forgetPassword.fulfilled, state => {
+        state.isLoading = false;
+      })
+      .addCase(forgetPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || action.error;
+      })
+
+      // setupPassword
+      .addCase(setupPassword.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(setupPassword.fulfilled, state => {
+        state.isLoading = false;
+      })
+      .addCase(setupPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || action.error;
+      })
+
+      // resendOtp
+      .addCase(resendOtp.pending, state => {
+        state.isOtpLoading = true;
+      })
+      .addCase(resendOtp.fulfilled, (state, action) => {
+        state.isOtpLoading = false;
+        state.error = null;
+      })
+      .addCase(resendOtp.rejected, (state, action) => {
+        state.isOtpLoading = false;
+        state.error = action.payload || action.error;
+      })
+
       // signOut
       .addCase(signOut.fulfilled, state => {
         state.isLoading = false;
