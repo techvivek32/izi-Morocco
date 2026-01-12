@@ -2,9 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosRequestConfig } from 'axios';
 import { API_URL, APP_NAME } from '@env';
 
-const API_BASE_URL: string = API_URL;
+const API_BASE_URL: string = API_URL || 'https://izi-morocco-1.onrender.com';
 
-  console.log({API_BASE_URL})
+console.log('API_BASE_URL loaded:', API_BASE_URL);
 
 /**
  * Interface for defining the properties required for making an API service request
@@ -41,9 +41,14 @@ const ApiService = async ({
       throw new Error('API endpoint is undefined.');
     }
 
+    const fullUrl = `${API_BASE_URL.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
+    
+    console.log(`[ApiService] Request: ${method} ${fullUrl}`);
+    if (data) console.log('[ApiService] Data:', JSON.stringify(data, null, 2));
+
     const axiosConfig: AxiosRequestConfig = {
       method,
-      url: `${API_BASE_URL}/${endpoint}`,
+      url: fullUrl,
       headers: {
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
