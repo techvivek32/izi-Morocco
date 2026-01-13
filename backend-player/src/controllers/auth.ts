@@ -28,6 +28,8 @@ export const signup = async (req: Request, res: Response) => {
   const ttl = 10 * 60 * 1000 // 10 minutes
   const expiresAt = new Date(Date.now() + ttl)
 
+  console.log(`[OTP DEBUG] Signup OTP for ${email}: ${otp}`);
+
   // SEND THE OTP TO PLAYER'S EMAIL FOR VERIFICATION
   await Promise.all([
     Players.create(playerDetails),
@@ -98,6 +100,8 @@ export const login = async (req: Request, res: Response) => {
     const otp = generateOTP()
     const ttl = 10 * 60 * 1000 // 10 minutes
     const expiresAt = new Date(Date.now() + ttl)
+
+    console.log(`[OTP DEBUG] Login Verification OTP for ${player.email}: ${otp}`);
 
     await Promise.all([
       TempStorage.findOneAndUpdate(
@@ -195,6 +199,8 @@ export const forgetPassword = async (req: Request, res: Response) => {
     const otp = generateOTP()
     const ttl = 10 * 60 * 1000 // 10 minutes
     const expiresAt = new Date(Date.now() + ttl)
+
+    console.log(`[OTP DEBUG] OTP for ${player.email}: ${otp}`);
 
     await TempStorage.create({
       key: `forgetPassword_${player.playerId}`,
