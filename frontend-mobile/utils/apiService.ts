@@ -68,8 +68,10 @@ const ApiService = async ({
     );
 
     const response = await api(axiosConfig);
+    console.log(`[ApiService] Success: ${method} ${fullUrl}`);
     return response;
-  } catch (error) {
+  } catch (error: any) {
+    console.error(`[ApiService] Error: ${method} ${endpoint}`, error?.response?.data || error?.message || error);
     throw error;
   }
 };

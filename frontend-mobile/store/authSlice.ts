@@ -18,7 +18,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  isLoading: true,
+  isLoading: false,
   isInitLoading: false,
   isSignUpLoading: false,
   isSignInLoading: false,
