@@ -208,11 +208,24 @@ export const forgetPassword = async (req: Request, res: Response) => {
       { upsert: true }
     )
 
-    await sendEmail('FORGET_PASSWORD', {
+    // For development/debugging: Log the OTP clearly
+    console.log(`[OTP DEBUG] OTP for ${email}: ${otp}`);
+
+    const emailResponse: any = await sendEmail('FORGET_PASSWORD', {
       email: player.email,
       name: player.name,
       otp
-    })
+    });
+
+    return res.status(200).json({
+      message: emailResponse?.success 
+        ? 'Password reset link has been sent to your email.' 
+        : `OTP generated (Email service delayed). For testing, use the OTP from logs or try again later.`,
+      success: true,
+      // In a real production app, we wouldn't return the OTP in the response.
+      // But for debugging this specific issue, we can temporarily include it if email fails.
+      ...(process.env.NODE_ENV !== 'production' && !emailResponse?.success ? { debugOtp: otp } : {})
+    });
   }
 
   res.status(200).json({
