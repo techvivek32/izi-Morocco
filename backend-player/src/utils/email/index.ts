@@ -11,7 +11,7 @@ const sendEmail = async (
   const transportData = await getTransport()
 
   Object.assign(emailContentData, {
-    mailSender: `${config.common.companyName} <${config.common.fromEmail}>`
+    mailSender: `${config.common.companyName} <${process.env.MAIL_USER || config.common.fromEmail}>`
   })
 
   const emailbody = generateEmailBody[feature](emailContentData)
