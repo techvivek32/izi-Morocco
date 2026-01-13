@@ -202,11 +202,11 @@ export const forgetPassword = async (req: Request, res: Response) => {
 
     console.log(`[OTP DEBUG] OTP for ${player.email}: ${otp}`);
 
-    await TempStorage.create({
-      key: `forgetPassword_${player.playerId}`,
-      value: otp,
-      expiresAt
-    })
+    await TempStorage.findOneAndUpdate(
+      { key: `forgetPassword_${player.playerId}` },
+      { value: otp, expiresAt },
+      { upsert: true }
+    )
 
     await sendEmail('FORGET_PASSWORD', {
       email: player.email,
