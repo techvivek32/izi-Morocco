@@ -13,7 +13,7 @@ export default async (
       user: transportData.auth?.user
     })
     
-    const transporter = mailer.createTransporter(transportData)
+    const transporter = mailer.createTransport(transportData)
     
     // Verify connection
     console.log('[EMAIL] Verifying SMTP connection...')
