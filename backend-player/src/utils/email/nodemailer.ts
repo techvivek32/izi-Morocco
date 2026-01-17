@@ -13,7 +13,7 @@ export default async (
       user: transportData.auth?.user
     })
     
-    // Use SendGrid Web API instead of SMTP for Render compatibility
+    // Use SendGrid Web API instead of SMTP for Render compatibility(Render blocks SMTP)
     if (transportData.host === 'smtp.sendgrid.net') {
       console.log('[EMAIL] Using SendGrid Web API instead of SMTP')
       return await sendViaSendGridAPI(transportData.auth.pass, emailbody)
