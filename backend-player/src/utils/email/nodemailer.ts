@@ -1,6 +1,5 @@
 import mailer from 'nodemailer'
 import { DynamicObjectType } from '../../types'
-import axios from 'axios'
 
 export default async (
   transportData: DynamicObjectType,
@@ -36,12 +35,16 @@ export default async (
   }
 }
 
-// SendGrid Web API implementation
+// SendGrid Web API implementation using fetch
 async function sendViaSendGridAPI(apiKey: string, emailbody: DynamicObjectType) {
   try {
-    const response = await axios.post(
-      'https://api.sendgrid.com/v3/mail/send',
-      {
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         personalizations: [{
           to: [{ email: emailbody.to }],
           subject: emailbody.subject
@@ -51,20 +54,20 @@ async function sendViaSendGridAPI(apiKey: string, emailbody: DynamicObjectType) 
           type: 'text/html',
           value: emailbody.html || emailbody.text
         }]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+      })
+    })
     
-    console.log('[EMAIL] SendGrid API success:', response.status)
-    return { success: true, messageId: 'sendgrid-api-' + Date.now() }
+    if (response.ok) {
+      console.log('[EMAIL] SendGrid API success:', response.status)
+      return { success: true, messageId: 'sendgrid-api-' + Date.now() }
+    } else {
+      const errorData = await response.text()
+      console.error('[EMAIL] SendGrid API error:', response.status, errorData)
+      throw new Error(`SendGrid API error: ${response.status}`)
+    }
     
   } catch (error: any) {
-    console.error('[EMAIL] SendGrid API error:', error.response?.data || error.message)
+    console.error('[EMAIL] SendGrid API error:', error.message)
     throw error
   }
 }
