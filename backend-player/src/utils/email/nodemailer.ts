@@ -41,7 +41,20 @@ async function sendViaSendGridAPI(apiKey: string, emailbody: DynamicObjectType) 
     // Handle both string and array formats for 'to' field
     const toEmail = Array.isArray(emailbody.to) ? emailbody.to[0] : emailbody.to;
     
-    console.log('[EMAIL] Sending to:', toEmail, 'from:', emailbody.from);
+    // Extract email from "Name <email>" format or use a verified sender email
+    let fromEmail = emailbody.from;
+    if (typeof fromEmail === 'string' && fromEmail.includes('<')) {
+      // Extract email from "Name <email>" format
+      const match = fromEmail.match(/<([^>]+)>/);
+      fromEmail = match ? match[1] : fromEmail;
+    }
+    
+    // Use a verified sender email for SendGrid
+    if (fromEmail === 'apikey' || !fromEmail.includes('@')) {
+      fromEmail = 'noreply@izimorocco.com'; // Replace with your verified sender
+    }
+    
+    console.log('[EMAIL] Sending to:', toEmail, 'from:', fromEmail);
     
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
@@ -54,7 +67,10 @@ async function sendViaSendGridAPI(apiKey: string, emailbody: DynamicObjectType) 
           to: [{ email: toEmail }],
           subject: emailbody.subject
         }],
-        from: { email: emailbody.from },
+        from: { 
+          email: fromEmail,
+          name: 'IZI Morocco'
+        },
         content: [{
           type: 'text/html',
           value: emailbody.html || emailbody.text
