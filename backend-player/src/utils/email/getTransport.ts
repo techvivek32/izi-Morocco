@@ -4,7 +4,7 @@ export default async () => {
     smtpConfig: {
       host: process.env.MAIL_HOST,
       port: port,
-      secure: port === 465, // true for 465, false for other ports
+      secure: false, // false for port 587, true for port 465
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS
@@ -12,13 +12,10 @@ export default async () => {
       tls: {
         rejectUnauthorized: false
       },
-      connectionTimeout: 30000, // 30 seconds
+      requireTLS: true, // Force TLS for SendGrid
+      connectionTimeout: 30000,
       greetingTimeout: 30000,
-      socketTimeout: 30000,
-      pool: true,
-      maxConnections: 1,
-      rateDelta: 20000,
-      rateLimit: 5
+      socketTimeout: 30000
     }
   }
 }
