@@ -38,6 +38,11 @@ export default async (
 // SendGrid Web API implementation using fetch
 async function sendViaSendGridAPI(apiKey: string, emailbody: DynamicObjectType) {
   try {
+    // Handle both string and array formats for 'to' field
+    const toEmail = Array.isArray(emailbody.to) ? emailbody.to[0] : emailbody.to;
+    
+    console.log('[EMAIL] Sending to:', toEmail, 'from:', emailbody.from);
+    
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
@@ -46,7 +51,7 @@ async function sendViaSendGridAPI(apiKey: string, emailbody: DynamicObjectType) 
       },
       body: JSON.stringify({
         personalizations: [{
-          to: [{ email: emailbody.to }],
+          to: [{ email: toEmail }],
           subject: emailbody.subject
         }],
         from: { email: emailbody.from },
