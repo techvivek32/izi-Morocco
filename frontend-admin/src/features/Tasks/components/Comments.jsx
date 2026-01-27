@@ -143,9 +143,10 @@ const Comments = ({
         <FormStepperButtons
           curStep={curStep}
           previousStepHandler={previousStepHandler}
-          nextStepHandler={nextStepHandler}
+          nextStepHandler={handleNextStep}
           isLoading={isLoading || imageProcessingLoading}
           completedSteps={completedSteps}
+          isHiddenSubmitButton={true}
           // isDisabledNextButton={!!id || (!!questionId)}
         />
       </form>

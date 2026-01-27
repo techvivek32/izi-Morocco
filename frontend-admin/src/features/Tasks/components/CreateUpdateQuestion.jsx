@@ -88,6 +88,7 @@ const CreateUpdateQuestion = ({
   const { id } = useParams();
   const getQuestionId = id || getSessionData("questionId");
   const goTo = useNavigateTo();
+  const [isNextClicked, setIsNextClicked] = useState(false);
   const {
     register,
     handleSubmit,
@@ -472,9 +473,10 @@ const CreateUpdateQuestion = ({
           curStep={curStep}
           resetFormHandler={reset}
           previousStepHandler={previousStepHandler}
-          nextStepHandler={nextStepHandler}
+          nextStepHandler={handleNextStep}
           isLoading={isLoading || imageProcessingLoading}
           completedSteps={completedSteps}
+          isHiddenSubmitButton={true}
           // isDisabledNextButton={!!id || (!!getQuestionId)}
         />
       </form>

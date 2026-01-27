@@ -54,6 +54,7 @@ const Media = ({
   });
   const { errors } = formState;
   const [isUploading, setIsUploading] = useState(false);
+  const [isNextClicked, setIsNextClicked] = useState(false);
 
   const { createQuestionApi, createMediaApi, getMediaApi } = useSelector(
     (state) => state.question
@@ -357,13 +358,14 @@ const Media = ({
 
           </div>
           <FormStepperButtons
-            curStep={curStep}
-            previousStepHandler={previousStepHandler}
-            nextStepHandler={nextStepHandler}
-            isLoading={isLoading || isUploading}
-            completedSteps={completedSteps}
-          // isDisabledNextButton={!!id}
-          />
+          curStep={curStep}
+          previousStepHandler={previousStepHandler}
+          nextStepHandler={handleNextStep}
+          isLoading={isLoading || isUploading}
+          completedSteps={completedSteps}
+          isHiddenSubmitButton={true}
+          // isDisabledNextButton={!!id || (!!questionId)}
+        />
         </form>
       </FormProvider>
     </div>
