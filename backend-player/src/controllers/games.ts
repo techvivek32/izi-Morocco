@@ -329,7 +329,9 @@ const createPipelineForGameLogs = (
               timeLimit: '$$g.timeLimit',
               language: '$$g.language',
               introMessage: '$$g.introMessage',
-              finishMessage: '$$g.finishMessage'
+              finishMessage: '$$g.finishMessage',
+              playgroundImage: '$$g.playgroundImage',
+              playgroundName: '$$g.playgroundName'
             }
           }
         }
@@ -567,7 +569,9 @@ export const joinGameController = async (req: Request, res: Response) => {
               timeLimit: '$$g.timeLimit',
               language: '$$g.language',
               introMessage: '$$g.introMessage',
-              finishMessage: '$$g.finishMessage'
+              finishMessage: '$$g.finishMessage',
+              playgroundImage: '$$g.playgroundImage',
+              playgroundName: '$$g.playgroundName'
             }
           }
         }

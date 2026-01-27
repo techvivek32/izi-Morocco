@@ -78,6 +78,14 @@ const GameInfoSchema = new mongoose.Schema(
     backGroundImage: {
       type: String,
       default: undefined
+    },
+    playgroundImage: {
+      type: String,
+      default: undefined
+    },
+    playgroundName: {
+      type: String,
+      default: undefined
     }
   },
   {
