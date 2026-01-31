@@ -14,6 +14,7 @@ const FormStepperButtons = ({
   isHiddenSubmitButton = false,
   isDisabledNextButton = false,
   isDisabledSubmitButton = false,
+  nextButtonType = "button",
 }) => {
   // console.log({ completedSteps });
 
@@ -49,7 +50,11 @@ const FormStepperButtons = ({
         )}
 
         {curStep < lastStep && (
-          <Button onClick={nextStepHandler} disabled={isDisabledNextButton}>
+          <Button
+            onClick={nextStepHandler}
+            disabled={isDisabledNextButton}
+            type={nextButtonType}
+          >
             <span>Next Step</span>
 
             <ArrowIcon variant="light" />

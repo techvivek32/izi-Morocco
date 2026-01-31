@@ -54,7 +54,7 @@ const Media = ({
   });
   const { errors } = formState;
   const [isUploading, setIsUploading] = useState(false);
-  const [isNextClicked, setIsNextClicked] = useState(false);
+  const isNextClicked = useRef(false);
 
   const { createQuestionApi, createMediaApi, getMediaApi } = useSelector(
     (state) => state.question
@@ -255,7 +255,6 @@ const Media = ({
 
   const handleNextStep = () => {
     isNextClicked.current = true;
-    handleSubmit(onSubmit)();
   };
 
   return (
@@ -377,7 +376,7 @@ const Media = ({
           isLoading={isLoading || isUploading}
           completedSteps={completedSteps}
           isHiddenSubmitButton={true}
-          // isDisabledNextButton={!!id || (!!questionId)}
+          nextButtonType="submit"
         />
         </form>
       </FormProvider>

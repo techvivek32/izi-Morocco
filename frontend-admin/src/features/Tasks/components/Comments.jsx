@@ -122,7 +122,6 @@ const Comments = ({
 
   const handleNextStep = () => {
     isNextClicked.current = true;
-    handleSubmit(onSubmit)();
   };
 
   return (
@@ -160,7 +159,7 @@ const Comments = ({
           isLoading={isLoading || imageProcessingLoading}
           completedSteps={completedSteps}
           isHiddenSubmitButton={true}
-          // isDisabledNextButton={!!id || (!!questionId)}
+          nextButtonType="submit"
         />
       </form>
     </div>

@@ -89,6 +89,10 @@ const CreateUpdateQuestion = ({
   const getQuestionId = id || getSessionData("questionId");
   const goTo = useNavigateTo();
   const [isNextClicked, setIsNextClicked] = useState(false);
+  const isNextClickedRef = useRef(false); // Using ref to avoid re-renders
+  // Note: I will replace usage of isNextClicked with isNextClickedRef.current
+  // But wait, I should just replace the line.
+
   const {
     register,
     handleSubmit,
@@ -322,8 +326,7 @@ const CreateUpdateQuestion = ({
   }
 
   const handleNextStep = () => {
-    setIsNextClicked(true);
-    handleSubmit(onSubmit)();
+    isNextClicked.current = true;
   };
 
   return (
@@ -496,6 +499,7 @@ const CreateUpdateQuestion = ({
           isLoading={isLoading || imageProcessingLoading}
           completedSteps={completedSteps}
           isHiddenSubmitButton={true}
+          nextButtonType="submit"
           // isDisabledNextButton={!!id || (!!getQuestionId)}
         />
       </form>
