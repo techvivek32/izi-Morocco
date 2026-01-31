@@ -88,10 +88,7 @@ const CreateUpdateQuestion = ({
   const { id } = useParams();
   const getQuestionId = id || getSessionData("questionId");
   const goTo = useNavigateTo();
-  const [isNextClicked, setIsNextClicked] = useState(false);
-  const isNextClickedRef = useRef(false); // Using ref to avoid re-renders
-  // Note: I will replace usage of isNextClicked with isNextClickedRef.current
-  // But wait, I should just replace the line.
+  const isNextClicked = useRef(false);
 
   const {
     register,
