@@ -307,6 +307,11 @@ const CreateUpdateQuestion = ({
     return <CreateUpdateQuestionSkeleton />
   }
 
+  const handleNextStep = () => {
+    setIsNextClicked(true);
+    handleSubmit(onSubmit)();
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>

@@ -245,6 +245,12 @@ const Media = ({
   if (getMediaApi.isLoading) {
     return <MediaSkeleton />
   }
+
+  const handleNextStep = () => {
+    setIsNextClicked(true);
+    handleSubmit(onSubmit)();
+  };
+
   return (
     <div>
       <FormProvider {...form}>
