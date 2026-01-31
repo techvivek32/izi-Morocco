@@ -38,7 +38,7 @@ const Comments = ({
   );
   const { id } = useParams();
   const [imageProcessingLoading, setImageProcessingLoading] = useState(false);
-  const [isNextClicked, setIsNextClicked] = useState(false);
+  const isNextClicked = useRef(false);
   const questionId =
     createQuestionApi?.data?.response?._id || getSessionData("questionId");
   const { data, isLoading, error, status } = createCommentApi;
@@ -121,7 +121,7 @@ const Comments = ({
   }
 
   const handleNextStep = () => {
-    setIsNextClicked(true);
+    isNextClicked.current = true;
     handleSubmit(onSubmit)();
   };
 

@@ -254,7 +254,7 @@ const Media = ({
   }
 
   const handleNextStep = () => {
-    setIsNextClicked(true);
+    isNextClicked.current = true;
     handleSubmit(onSubmit)();
   };
 
