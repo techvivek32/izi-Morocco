@@ -10,7 +10,7 @@ import {
   resetApiStateFromQuestion,
 } from "../../../slices/questionSlice";
 import useApiResponseHandler from "../../../hooks/useApiResponseHandler";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getSessionData } from "../../../utils/sessionStorage";
 import { apiResponseType } from "../../../utils/types";
 import toast from "react-hot-toast";
@@ -179,7 +179,14 @@ const Media = ({
     data,
     error,
     setFormError: setError,
-    sideAction: () => markStepCompleted(curStep),
+    sideAction: () => {
+      if (isNextClicked.current) {
+        nextStepHandler();
+        isNextClicked.current = false;
+      } else {
+        markStepCompleted(curStep);
+      }
+    },
   });
 
   useEffect(() => {

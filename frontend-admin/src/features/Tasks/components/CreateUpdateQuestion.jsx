@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import AntMultiSelector from "../../../components/form/AntDesign/AntMultiSelector";
 import AntSearchableSelector from "../../../components/form/AntDesign/AntSearchableSelector";
 import CommonInput from "../../../components/form/CommonInput";
@@ -217,7 +217,14 @@ const CreateUpdateQuestion = ({
     data,
     error,
     setFormError: setError,
-    sideAction: () => markStepCompleted(curStep),
+    sideAction: () => {
+      if (isNextClicked.current) {
+        nextStepHandler();
+        isNextClicked.current = false;
+      } else {
+        markStepCompleted(curStep);
+      }
+    },
   });
 
   useApiResponseHandler({
@@ -225,7 +232,14 @@ const CreateUpdateQuestion = ({
     data: updateQuestionApi.data,
     error: updateQuestionApi.error,
     setFormError: setError,
-    sideAction: () => markStepCompleted(curStep),
+    sideAction: () => {
+      if (isNextClicked.current) {
+        nextStepHandler();
+        isNextClicked.current = false;
+      } else {
+        markStepCompleted(curStep);
+      }
+    },
   });
 
   useEffect(() => {

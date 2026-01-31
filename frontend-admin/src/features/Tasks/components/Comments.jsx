@@ -8,7 +8,7 @@ import {
 } from "../../../slices/questionSlice";
 import useApiResponseHandler from "../../../hooks/useApiResponseHandler";
 import { getSessionData } from "../../../utils/sessionStorage";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { apiResponseType } from "../../../utils/types";
 import toast from "react-hot-toast";
 import RichTextEditor from "../../../components/ReactQuill";
@@ -68,7 +68,14 @@ const Comments = ({
     data,
     error,
     setFormError: setError,
-    sideAction: () => markStepCompleted(curStep),
+    sideAction: () => {
+      if (isNextClicked.current) {
+        nextStepHandler();
+        isNextClicked.current = false;
+      } else {
+        markStepCompleted(curStep);
+      }
+    },
   });
 
   useEffect(() => {
