@@ -22,6 +22,7 @@ import commonStyles from '../../styles/commonStyles';
 import { RFValue } from '../../utils/responsive';
 import colors from '../../styles/colors';
 import ScreenWrapper from '../../components/ScreenWrapper';
+import BackHeader from '../../components/BackHeader';
 
 interface QRData {
   id: number;
@@ -195,6 +196,9 @@ const QRCode = ({ navigation }) => {
         }}
       >
         <View style={[commonStyles.container, styles.wrapper]}>
+          {/* Back button */}
+          <BackHeader />
+
           {/* Header */}
           <View style={styles.header}>
             <Text style={[commonStyles.h1Text, styles.headerTitle]}>
@@ -279,7 +283,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: RFValue(20),
-    paddingTop: RFValue(50),
+    paddingTop: RFValue(10),
     paddingBottom: RFValue(20),
     zIndex: 10,
   },
