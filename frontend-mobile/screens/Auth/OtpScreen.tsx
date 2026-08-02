@@ -163,6 +163,17 @@ export default function OtpScreen({ navigation, route }: any) {
                     Verification code has been sent to your registered email
                     address
                   </Text>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: RFValue(12),
+                      color: colors.textSecondary,
+                      fontFamily: 'Neue-Regular',
+                      marginTop: RFValue(8),
+                    }}
+                  >
+                    Don’t see it? Please also check your Spam / Junk folder.
+                  </Text>
                 </View>
 
                 {/* ✅ OTP Input */}

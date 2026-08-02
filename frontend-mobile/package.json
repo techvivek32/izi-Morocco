@@ -45,6 +45,7 @@
     "react-native-vector-icons": "^10.3.0",
     "react-native-video": "^6.19.0",
     "react-native-view-shot": "^4.0.3",
+    "react-native-vision-camera": "^4.7.3",
     "react-native-webview": "^13.16.0",
     "react-native-youtube-iframe": "^2.4.1",
     "react-redux": "^9.2.0"

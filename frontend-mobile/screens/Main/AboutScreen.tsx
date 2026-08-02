@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import ScreenWrapper from '../../components/ScreenWrapper';
+import BackHeader from '../../components/BackHeader';
 import commonStyles from '../../styles/commonStyles';
 import { RFValue } from '../../utils/responsive';
 import colors from '../../styles/colors';
@@ -9,6 +10,7 @@ import colors from '../../styles/colors';
 const AboutScreen = () => {
   return (
     <ScreenWrapper backgroundColor="#ffffff">
+      <BackHeader title="About" />
       <ScrollView
         style={commonStyles.container}
         contentContainerStyle={styles.content}

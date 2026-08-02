@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,19 @@ import {
   Alert,
   Animated,
   Vibration,
+  Linking,
 } from 'react-native';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+import { useIsFocused } from '@react-navigation/native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import commonStyles from '../../styles/commonStyles';
 import { RFValue } from '../../utils/responsive';
+import colors from '../../styles/colors';
 import ScreenWrapper from '../../components/ScreenWrapper';
 
 interface QRData {
@@ -28,7 +35,26 @@ const QRCode = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const shakeAnim = useState(new Animated.Value(0))[0];
   const [errorFlash, setErrorFlash] = useState(false);
-  console.log({errorFlash})
+
+  // --- vision-camera setup ---
+  const device = useCameraDevice('back');
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const isFocused = useIsFocused();
+  const scannedRef = useRef(false);
+
+  // Ask for camera permission when screen opens
+  useEffect(() => {
+    if (!hasPermission) {
+      requestPermission();
+    }
+  }, [hasPermission, requestPermission]);
+
+  // Allow scanning again every time the screen comes back into focus
+  useEffect(() => {
+    if (isFocused) {
+      scannedRef.current = false;
+    }
+  }, [isFocused]);
 
   const triggerErrorAnimation = () => {
     setErrorFlash(true);
@@ -93,6 +119,7 @@ const QRCode = ({ navigation }) => {
 
       if (missingFields.length > 0) {
         triggerErrorAnimation();
+        scannedRef.current = false; // let user try again
         return;
       }
 
@@ -106,13 +133,23 @@ const QRCode = ({ navigation }) => {
         activationCode: finalData.activecode,
       });
     } catch (error) {
+      scannedRef.current = false; // let user try again
       Alert.alert('Invalid QR Code!', 'Scanned data is not valid JSON');
     }
   };
 
-  const onSuccess = (e: any) => {
-    handleScannedText(e.data);
-  };
+  // --- vision-camera code scanner ---
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr'],
+    onCodeScanned: codes => {
+      if (scannedRef.current) return;
+      const value = codes?.[0]?.value;
+      if (value) {
+        scannedRef.current = true;
+        handleScannedText(value);
+      }
+    },
+  });
 
   // 📌 Decode QR from gallery image using API
   const pickImage = async () => {
@@ -170,25 +207,45 @@ const QRCode = ({ navigation }) => {
 
           {/* Scanner */}
           <View style={styles.scannerWrapper}>
-            <QRCodeScanner
-              onRead={onSuccess}
-              flashMode={RNCamera.Constants.FlashMode.off}
-              cameraStyle={styles.camera}
-              showMarker={true}
-              customMarker={
-                <View style={styles.markerContainer}>
-                  <View style={styles.scanOverlay}>
-                    <View style={styles.cornerTopLeft} />
-                    <View style={styles.cornerTopRight} />
-                    <View style={styles.cornerBottomLeft} />
-                    <View style={styles.cornerBottomRight} />
-                  </View>
-                  <View style={styles.scanLineContainer}>
-                    <View style={styles.scanLine} />
-                  </View>
+            {hasPermission && device ? (
+              <Camera
+                style={StyleSheet.absoluteFill}
+                device={device}
+                isActive={isFocused}
+                codeScanner={codeScanner}
+              />
+            ) : (
+              <View style={styles.permissionBox}>
+                <Text style={[commonStyles.pText, styles.permissionText]}>
+                  {!device
+                    ? 'No camera available on this device.'
+                    : 'Camera permission is required to scan QR codes.'}
+                </Text>
+                {!hasPermission && (
+                  <TouchableOpacity
+                    style={styles.permissionBtn}
+                    onPress={() => Linking.openSettings()}
+                  >
+                    <Text style={styles.permissionBtnText}>Open Settings</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+
+            {/* Scan frame overlay */}
+            <View style={styles.overlay} pointerEvents="none">
+              <View style={styles.markerContainer}>
+                <View style={styles.scanOverlay}>
+                  <View style={styles.cornerTopLeft} />
+                  <View style={styles.cornerTopRight} />
+                  <View style={styles.cornerBottomLeft} />
+                  <View style={styles.cornerBottomRight} />
                 </View>
-              }
-            />
+                <View style={styles.scanLineContainer}>
+                  <View style={styles.scanLine} />
+                </View>
+              </View>
+            </View>
           </View>
 
           {/* Gallery Upload Button */}
@@ -218,7 +275,7 @@ const styles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 0,
     paddingVertical: 0,
-    backgroundColor:'transparent',
+    backgroundColor: 'transparent',
   },
   header: {
     paddingHorizontal: RFValue(20),
@@ -237,9 +294,35 @@ const styles = StyleSheet.create({
   scannerWrapper: {
     flex: 1,
     overflow: 'hidden',
+    backgroundColor: '#000',
   },
-  camera: {
-    flex: 1,
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  permissionBox: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: RFValue(30),
+    backgroundColor: '#111',
+  },
+  permissionText: {
+    color: '#fff',
+    textAlign: 'center',
+    marginBottom: RFValue(16),
+  },
+  permissionBtn: {
+    backgroundColor: colors.primary,
+    paddingVertical: RFValue(12),
+    paddingHorizontal: RFValue(28),
+    borderRadius: RFValue(24),
+  },
+  permissionBtnText: {
+    color: '#fff',
+    fontFamily: 'Neue-Bold',
+    fontSize: RFValue(14),
   },
   markerContainer: {
     width: RFValue(280),

@@ -71,7 +71,10 @@ const ApiService = async ({
     console.log(`[ApiService] Success: ${method} ${fullUrl}`);
     return response;
   } catch (error: any) {
-    console.error(`[ApiService] Error: ${method} ${endpoint}`, error?.response?.data || error?.message || error);
+    // Use console.log (not console.error) so handled/expected API failures
+    // (e.g. an invalid or expired token returning "Invalid User") don't trigger
+    // the red LogBox error overlay in dev. Callers still receive the thrown error.
+    console.log(`[ApiService] Error: ${method} ${endpoint}`, error?.response?.data || error?.message || error);
     throw error;
   }
 };

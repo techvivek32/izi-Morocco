@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Alert } from 'react-native';
 import ScreenWrapper from '../../components/ScreenWrapper';
+import BackHeader from '../../components/BackHeader';
 import commonStyles from '../../styles/commonStyles';
 import { RFValue } from '../../utils/responsive';
 import SplashButton from '../../components/SplashButton';
@@ -92,8 +93,8 @@ export default function TeamManagementScreen() {
 
   return (
     <ScreenWrapper backgroundColor="#ffffff">
+      <BackHeader title="Team Management" />
       <View style={[commonStyles.container, styles.container]}>
-        <Text style={styles.title}>Team Management</Text>
 
         {team ? (
           <View style={styles.card}>
